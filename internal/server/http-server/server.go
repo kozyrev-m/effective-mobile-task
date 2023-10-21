@@ -14,9 +14,21 @@ type HTTPServer struct {
 
 // New is a constructor to create HTTPServer.
 func New() *HTTPServer {
-	return &HTTPServer{
+	s := &HTTPServer{
 		router: gin.New(),
 	}
+
+	s.initRouter()
+
+	return s
+}
+
+// initRouter sets endpoints.
+func (s *HTTPServer) initRouter() {
+	s.router.GET("/find/:id", s.handlerFindPerson)
+	s.router.DELETE("/delete/:id", s.handlerDeletePerson)
+	s.router.PATCH("/update/:id", s.handlerUpdatePerson)
+	s.router.POST("/add", s.handlerAddPerson)
 }
 
 // ServeHTTP implements http.Handler interface.
