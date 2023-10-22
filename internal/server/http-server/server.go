@@ -27,6 +27,9 @@ func New() *HTTPServer {
 
 // initRouter sets endpoints.
 func (s *HTTPServer) initRouter() {
+	s.router.Use(s.dummyMiddleware())
+	s.router.Use(s.withLogging())
+
 	s.router.GET("/find/:id", s.handlerFindPerson)
 	s.router.DELETE("/delete/:id", s.handlerDeletePerson)
 	s.router.PATCH("/update/:id", s.handlerUpdatePerson)
