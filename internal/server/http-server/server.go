@@ -14,6 +14,8 @@ type HTTPServer struct {
 
 // New is a constructor to create HTTPServer.
 func New() *HTTPServer {
+	gin.SetMode(gin.ReleaseMode)
+
 	s := &HTTPServer{
 		router: gin.New(),
 	}
