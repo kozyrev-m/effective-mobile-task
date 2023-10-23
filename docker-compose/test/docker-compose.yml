@@ -1,0 +1,12 @@
+services:
+  postgres:
+    container_name: test_db_effmobile
+    image: postgres:14.3-alpine
+    ports:
+      - "15438:5432"
+    environment:
+      POSTGRES_DB: effmobile_test
+      POSTGRES_USER: effmobile
+      POSTGRES_PASSWORD: effmobile
+    volumes:
+      - /var/effective-mobile-task/db-test/postgres:/var/lib/postgresql/data
