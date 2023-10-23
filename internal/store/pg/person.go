@@ -38,3 +38,50 @@ func (s *Store) CreatePerson(ctx context.Context, p entities.Person) (uint64, er
 
 	return id, nil
 }
+
+// sqlFindPersonByID is used to get person.
+//
+//	$1 - id
+//
+// It returns id, name, patronymic, surname, age, gender, nationality.
+var sqlFindPersonByID = `
+	SELECT id, name, patronymic, surname, age, gender, nationality
+	FROM persons
+	WHERE id = $1
+`
+
+// GetPersonByID finds person by id.
+func (s *Store) GetPersonByID(ctx context.Context, personID uint64) (*entities.Person, error) {
+	person := &entities.Person{}
+	err := s.conn.QueryRowContext(ctx, sqlFindPersonByID, personID).
+		Scan(
+			&person.ID, &person.Name, &person.Patronymic,
+			&person.Surname, &person.Age, &person.Gender,
+			&person.Nationality,
+		)
+	if err != nil {
+		return nil, err
+	}
+
+	return person, nil
+}
+
+// sqlDeletePerson is used to delete row with person by id.
+//
+//	$1 - id
+//
+// It returns deleted person id.
+var sqlDeletePersonByID = `
+	DELETE FROM persons WHERE id = $1 RETURNING id
+`
+
+// DeletePerson deletes person.
+func (s *Store) DeletePerson(ctx context.Context, personID uint64) (uint64, error) {
+	var deletedPersonID uint64
+	err := s.conn.QueryRowContext(ctx, sqlDeletePersonByID, personID).Scan(&deletedPersonID)
+	if err != nil {
+		return 0, err
+	}
+
+	return deletedPersonID, nil
+}

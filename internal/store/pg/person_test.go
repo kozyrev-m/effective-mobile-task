@@ -19,3 +19,36 @@ func (suite *storeTestSuite) TestCreatePerson() {
 	suite.NoError(err)
 	suite.NotZero(id)
 }
+
+func (suite *storeTestSuite) TestGetPersonByID() {
+	suite.NotNil(suite.store)
+
+	_, err := suite.store.GetPersonByID(context.TODO(), 1234)
+	suite.Error(err)
+
+	person := entities.Person{Name: "Ivan", Patronymic: "Ivanovich", Surname: "Ivanov", Age: 30, Gender: "man", Nationality: "Russian"}
+	id, err := suite.store.CreatePerson(context.TODO(), person)
+	suite.NoError(err)
+	person.ID = id
+
+	found, err := suite.store.GetPersonByID(context.TODO(), id)
+	suite.NoError(err)
+	suite.NotNil(found)
+	suite.Equal(person, *found)
+}
+
+func (suite *storeTestSuite) TestDeletePerson() {
+	suite.NotNil(suite.store)
+
+	_, err := suite.store.DeletePerson(context.TODO(), 1)
+	suite.Error(err)
+
+	person := entities.Person{Name: "Ivan", Patronymic: "Ivanovich", Surname: "Ivanov", Age: 30, Gender: "man", Nationality: "Russian"}
+	id, err := suite.store.CreatePerson(context.TODO(), person)
+	suite.NoError(err)
+	suite.NotZero(id)
+
+	deletedID, err := suite.store.DeletePerson(context.TODO(), id)
+	suite.NoError(err)
+	suite.Equal(id, deletedID)
+}
