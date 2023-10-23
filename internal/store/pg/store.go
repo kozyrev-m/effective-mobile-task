@@ -25,6 +25,11 @@ func NewStore(dsn string) (*Store, error) {
 	}
 	logger.Log.Info("connection to db established")
 
+	if err := MigrationsUp(db); err != nil {
+		return nil, err
+	}
+	logger.Log.Info("db migrated")
+
 	s := &Store{
 		conn: db,
 	}
@@ -39,7 +44,7 @@ func (s *Store) Close() {
 		logger.Log.Error("db close error", zap.Error(err))
 		return
 	}
-	logger.Log.Info("store has been closed successfully")
+	logger.Log.Info("store closed successfully")
 }
 
 // newPostgresDB establishes a connection to the PostgreSQL database.
