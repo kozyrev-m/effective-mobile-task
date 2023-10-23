@@ -85,3 +85,49 @@ func (s *Store) DeletePerson(ctx context.Context, personID uint64) (uint64, erro
 
 	return deletedPersonID, nil
 }
+
+// sqlUpdatePerson is used to update person.
+//
+//	$1 - id
+//
+//	$2 - name
+//	$3 - patronymic
+//	$4 - surname
+//	$5 - age
+//	$6 - gender
+//	$7 - nationality
+var sqlUpdatePerson = `
+	UPDATE persons
+	SET
+		name = COALESCE($2, name),
+		patronymic = COALESCE($3, patronymic),
+		surname = COALESCE($4, surname),
+		age = COALESCE($5, age),
+		gender = COALESCE($6, gender),
+		nationality = COALESCE($7, nationality),
+		updated_at = now()
+	WHERE id = $1
+	RETURNING id, name, patronymic, surname, age, gender, nationality
+`
+
+// UpdatePerson updates person.
+func (s *Store) UpdatePerson(ctx context.Context, personID uint64, p entities.Person) (*entities.Person, error) {
+	person := &entities.Person{}
+	err := s.conn.QueryRowContext(
+		ctx,
+		sqlUpdatePerson,
+		personID,
+		p.Name, p.Patronymic, p.Surname,
+		p.Age, p.Gender, p.Nationality,
+	).Scan(
+		&person.ID, &person.Name, &person.Patronymic,
+		&person.Surname, &person.Age, &person.Gender,
+		&person.Nationality,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return person, nil
+}

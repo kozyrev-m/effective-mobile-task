@@ -14,7 +14,7 @@ type RepositoryPerson interface {
 	// DeletePerson deletes person by id
 	DeletePerson(ctx context.Context, personID uint64) (uint64, error)
 	// UpdatePerson edites person
-	UpdatePerson(ctx context.Context, person entities.Person) (*entities.Person, error)
+	UpdatePerson(ctx context.Context, peronID, person entities.Person) (*entities.Person, error)
 	// CreatePerson creates person
 	CreatePerson(ctx context.Context, person entities.Person) (uint64, error)
 }
