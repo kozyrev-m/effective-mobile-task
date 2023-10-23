@@ -20,7 +20,9 @@ docker-test-down: ## Stop and remove test container
 
 ## Test:
 test: ## Run tests
-	go test -count=1 -v ./...
+	@docker-compose --file docker-compose/test/docker-compose.yml up -d
+	@go test -count=1 -v ./...
+	@docker-compose --file docker-compose/test/docker-compose.yml down
 
 ## Info:
 info: ## Show help information
