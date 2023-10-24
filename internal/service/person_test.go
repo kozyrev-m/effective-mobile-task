@@ -6,9 +6,6 @@ import (
 	"math/rand"
 	"time"
 
-	// "math/rand"
-	// "time"
-
 	"github.com/kozyrev-m/effective-mobile-task/internal/entities"
 	"go.uber.org/mock/gomock"
 )

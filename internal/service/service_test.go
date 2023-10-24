@@ -32,7 +32,7 @@ func (suite *serviceTestSuite) SetupTest() {
 func (suite *serviceTestSuite) TearDownTest() {
 }
 
-// TestServiceTestSuite is entry point for testing the controller.
+// TestServiceTestSuite is entry point for testing layer service.
 func TestServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(serviceTestSuite))
 }
