@@ -1,5 +1,5 @@
-// Package svc contains service layer that works with business logic.
-package svc
+// Package service contains service layer that works with business logic.
+package service
 
 import "github.com/kozyrev-m/effective-mobile-task/internal/store"
 

@@ -21,7 +21,7 @@ func (suite *handlerTestSuite) TearDownSuite() {
 
 // SetupTest executes before each test cases.
 func (suite *handlerTestSuite) SetupTest() {
-	suite.srv = New()
+	suite.srv = New(nil)
 }
 
 // TearDownTest executes after each test case.

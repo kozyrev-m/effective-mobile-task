@@ -7,5 +7,6 @@ RUN go build -v -o effmobile ./cmd/main.go
 
 FROM alpine:3.16
 COPY --from=builder /eff-mobile/effmobile /
+COPY --from=builder /eff-mobile/migrations /migrations
 USER nobody
 CMD ["/effmobile"]

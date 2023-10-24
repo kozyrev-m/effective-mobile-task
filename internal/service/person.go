@@ -1,4 +1,4 @@
-package svc
+package service
 
 import (
 	"context"
@@ -17,8 +17,8 @@ func (svc *Service) CreatePerson(ctx context.Context, person entities.Person) (u
 }
 
 // FindPersonByID is method that find person by id.
-func (c *Service) FindPersonByID(ctx context.Context, id uint64) (*entities.Person, error) {
-	person, err := c.store.GetPersonByID(ctx, id)
+func (svc *Service) FindPersonByID(ctx context.Context, id uint64) (*entities.Person, error) {
+	person, err := svc.store.GetPersonByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +27,8 @@ func (c *Service) FindPersonByID(ctx context.Context, id uint64) (*entities.Pers
 }
 
 // DeletePerson deletes person by id.
-func (c *Service) DeletePerson(ctx context.Context, personID uint64) (uint64, error) {
-	id, err := c.store.DeletePerson(ctx, personID)
+func (svc *Service) DeletePerson(ctx context.Context, personID uint64) (uint64, error) {
+	id, err := svc.store.DeletePerson(ctx, personID)
 	if err != nil {
 		return 0, err
 	}
@@ -37,11 +37,11 @@ func (c *Service) DeletePerson(ctx context.Context, personID uint64) (uint64, er
 }
 
 // UpdatePerson updates person.
-func (c *Service) UpdatePerson(ctx context.Context, personID uint64, params entities.Person) (*entities.Person, error) {
-	_, err := c.store.GetPersonByID(ctx, personID)
+func (svc *Service) UpdatePerson(ctx context.Context, personID uint64, params entities.Person) (*entities.Person, error) {
+	_, err := svc.store.GetPersonByID(ctx, personID)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.store.UpdatePerson(ctx, personID, params)
+	return svc.store.UpdatePerson(ctx, personID, params)
 }
