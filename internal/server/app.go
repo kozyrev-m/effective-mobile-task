@@ -8,6 +8,7 @@ import (
 	"github.com/kozyrev-m/effective-mobile-task/internal/config"
 	"github.com/kozyrev-m/effective-mobile-task/internal/logger"
 	httpserver "github.com/kozyrev-m/effective-mobile-task/internal/server/http-server"
+	"github.com/kozyrev-m/effective-mobile-task/internal/store/pg"
 	"go.uber.org/zap"
 )
 
@@ -17,8 +18,13 @@ func StartApp(cfg *config.Config) error {
 		return err
 	}
 
+	store, err := pg.NewStore(cfg.DatabaseDSN)
+	if err != nil {
+		return err
+	}
+
 	srv := &http.Server{
-		Handler: httpserver.New(),
+		Handler: httpserver.New(store),
 		Addr:    cfg.Address,
 	}
 

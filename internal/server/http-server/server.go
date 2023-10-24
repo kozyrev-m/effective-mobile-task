@@ -5,19 +5,25 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kozyrev-m/effective-mobile-task/internal/service"
+	"github.com/kozyrev-m/effective-mobile-task/internal/store"
 )
 
 // HTTPServer represents http-server.
 type HTTPServer struct {
-	router *gin.Engine
+	router  *gin.Engine
+	service *service.Service
 }
 
 // New is a constructor to create HTTPServer.
-func New() *HTTPServer {
+func New(store store.Store) *HTTPServer {
 	gin.SetMode(gin.ReleaseMode)
 
+	svc := service.NewService(store)
+
 	s := &HTTPServer{
-		router: gin.New(),
+		router:  gin.New(),
+		service: svc,
 	}
 
 	s.initRouter()
