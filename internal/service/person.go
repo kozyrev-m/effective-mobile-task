@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/kozyrev-m/effective-mobile-task/internal/entities"
+	"github.com/kozyrev-m/effective-mobile-task/internal/store"
 )
 
 // CreatePerson is method that creates person.
@@ -44,4 +45,9 @@ func (svc *Service) UpdatePerson(ctx context.Context, personID uint64, params en
 	}
 
 	return svc.store.UpdatePerson(ctx, personID, params)
+}
+
+// GetPersons gets persons by filter.
+func (svc *Service) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, error) {
+	return svc.store.GetPersons(ctx, filter)
 }

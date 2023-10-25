@@ -44,6 +44,8 @@ func (s *HTTPServer) initRouter() {
 	s.router.DELETE("/delete/:id", s.handlerDeletePerson)
 	s.router.PATCH("/update/:id", s.handlerUpdatePerson)
 	s.router.POST("/add", s.handlerAddPerson)
+	s.router.POST("/persons", s.handlerPersons)
+
 }
 
 // ServeHTTP implements http.Handler interface.

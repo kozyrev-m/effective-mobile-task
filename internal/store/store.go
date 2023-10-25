@@ -17,6 +17,8 @@ type RepositoryPerson interface {
 	UpdatePerson(ctx context.Context, personID uint64, person entities.Person) (*entities.Person, error)
 	// CreatePerson creates person
 	CreatePerson(ctx context.Context, person entities.Person) (uint64, error)
+	// GetPersons gets persons by filter.
+	GetPersons(ctx context.Context, filter Filter) ([]*entities.Person, error)
 }
 
 // Store describes an abstract storage.
