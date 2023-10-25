@@ -96,3 +96,9 @@ func (s *HTTPServer) handlerAddPerson(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"person": person})
 }
+
+// handlerPersons finds person.
+func (s *HTTPServer) handlerPersons(c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{"person": nil})
+}

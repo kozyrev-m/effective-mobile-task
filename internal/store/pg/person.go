@@ -2,8 +2,11 @@ package pg
 
 import (
 	"context"
+	"database/sql"
+	"strconv"
 
 	"github.com/kozyrev-m/effective-mobile-task/internal/entities"
+	"github.com/kozyrev-m/effective-mobile-task/internal/store"
 )
 
 // sqlCreatePerson is used to create person.
@@ -130,4 +133,133 @@ func (s *Store) UpdatePerson(ctx context.Context, personID uint64, p entities.Pe
 	}
 
 	return person, nil
+}
+
+// sqlPersons - quiery to get persons by filter.
+//
+// It expand in queryWithFilter.
+// It returns persons.
+var sqlPersons = `
+	SELECT id, name, patronymic, surname, age, gender, nationality
+	FROM persons
+`
+
+// UpdatePerson updates person.
+func (s *Store) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, error) {
+	rows, err := s.queryWithFilter(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	var arr []*entities.Person
+	defer rows.Close()
+
+	for rows.Next() {
+		p := new(entities.Person)
+		err := rows.Scan(
+			&p.ID,
+			&p.Name,
+			&p.Patronymic,
+			&p.Surname,
+			&p.Age,
+			&p.Gender,
+			&p.Nationality,
+		)
+		if err != nil {
+			return nil, err
+		}
+		arr = append(arr, p)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	if arr == nil {
+		return []*entities.Person{}, nil
+	}
+	return arr, err
+}
+
+func (s *Store) queryWithFilter(ctx context.Context, f store.Filter) (*sql.Rows, error) {
+	// array will hold all the unique values we want to add into the query.
+	var filterValues []interface{}
+	query := ` WHERE`
+
+	// build query
+	if f.ID != nil {
+		filterValues = append(filterValues, *f.ID)
+		query += ` id = $` + strconv.Itoa(len(filterValues))
+	}
+
+	if f.Name != nil {
+		filterValues = append(filterValues, "%"+*f.Name+"%")
+		if query != ` WHERE` {
+			query += ` AND`
+		}
+		query += ` name LIKE $` + strconv.Itoa(len(filterValues))
+
+	}
+
+	if f.Patronymic != nil {
+		filterValues = append(filterValues, "%"+*f.Patronymic+"%")
+		if query != ` WHERE` {
+			query += ` AND `
+		}
+		query += ` patronymic LIKE $` + strconv.Itoa(len(filterValues))
+	}
+
+	if f.Surname != nil {
+		filterValues = append(filterValues, "%"+*f.Surname+"%")
+		if query != ` WHERE` {
+			query += ` AND `
+		}
+		query += ` surname = $` + strconv.Itoa(len(filterValues))
+	}
+
+	if f.Age != nil {
+		filterValues = append(filterValues, *f.Age)
+		if query != ` WHERE` {
+			query += ` AND `
+		}
+		query += ` age = $` + strconv.Itoa(len(filterValues))
+	}
+
+	if f.Gender != nil {
+		filterValues = append(filterValues, "%"+*f.Gender+"%")
+		if query != ` WHERE` {
+			query += ` AND `
+		}
+		query += ` gender = $` + strconv.Itoa(len(filterValues))
+	}
+
+	if f.Nationality != nil {
+		filterValues = append(filterValues, "%"+*f.Nationality+"%")
+		if query != ` WHERE` {
+			query += ` AND `
+		}
+		query += ` nationality = $` + strconv.Itoa(len(filterValues))
+	}
+
+	query += ` ORDER BY id `
+
+	if f.Page == nil {
+		page := 1
+		f.Page = &page
+	}
+	if f.PerPage == nil {
+		defaultPerPage := 10
+		f.PerPage = &defaultPerPage
+	}
+
+	filterValues = append(filterValues, *f.PerPage)
+	query += ` LIMIT $` + strconv.Itoa(len(filterValues))
+
+	offset := (*f.Page - 1) * *f.PerPage
+
+	filterValues = append(filterValues, offset)
+	query += ` OFFSET $` + strconv.Itoa(len(filterValues))
+
+	sqlPersons += query
+
+	return s.conn.QueryContext(ctx, sqlPersons, filterValues...)
 }
