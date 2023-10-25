@@ -13,6 +13,7 @@ import (
 	reflect "reflect"
 
 	entities "github.com/kozyrev-m/effective-mobile-task/internal/entities"
+	store "github.com/kozyrev-m/effective-mobile-task/internal/store"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -82,6 +83,21 @@ func (m *MockStore) GetPersonByID(ctx context.Context, personID uint64) (*entiti
 func (mr *MockStoreMockRecorder) GetPersonByID(ctx, personID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPersonByID", reflect.TypeOf((*MockStore)(nil).GetPersonByID), ctx, personID)
+}
+
+// GetPersons mocks base method.
+func (m *MockStore) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPersons", ctx, filter)
+	ret0, _ := ret[0].([]*entities.Person)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPersons indicates an expected call of GetPersons.
+func (mr *MockStoreMockRecorder) GetPersons(ctx, filter any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPersons", reflect.TypeOf((*MockStore)(nil).GetPersons), ctx, filter)
 }
 
 // UpdatePerson mocks base method.

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kozyrev-m/effective-mobile-task/internal/dto"
 	"github.com/kozyrev-m/effective-mobile-task/internal/entities"
 )
 
@@ -99,6 +100,29 @@ func (s *HTTPServer) handlerAddPerson(c *gin.Context) {
 
 // handlerPersons finds person.
 func (s *HTTPServer) handlerPersons(c *gin.Context) {
+	input := dto.PersonsRequestBody{}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"person": nil})
+	filter := input.Convert()
+	persons, err := s.service.GetPersons(c.Request.Context(), filter)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Writer.Header().Set("Pagination-Page", strconv.Itoa(*filter.Page))
+	c.Writer.Header().Set("Pagination-Limit", strconv.Itoa(*filter.PerPage))
+
+	c.Writer.Header().Set(
+		"Has-Page",
+		strconv.FormatBool((len(persons)-*filter.PerPage) >= 0),
+	)
+
+	c.JSON(
+		http.StatusOK,
+		dto.PersonsResponseBody{Persons: persons},
+	)
 }

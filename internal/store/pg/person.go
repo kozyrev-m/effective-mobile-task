@@ -135,16 +135,7 @@ func (s *Store) UpdatePerson(ctx context.Context, personID uint64, p entities.Pe
 	return person, nil
 }
 
-// sqlPersons - quiery to get persons by filter.
-//
-// It expand in queryWithFilter.
-// It returns persons.
-var sqlPersons = `
-	SELECT id, name, patronymic, surname, age, gender, nationality
-	FROM persons
-`
-
-// UpdatePerson updates person.
+// GetPersons gets persons by filter.
 func (s *Store) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, error) {
 	rows, err := s.queryWithFilter(ctx, filter)
 	if err != nil {
@@ -181,6 +172,12 @@ func (s *Store) GetPersons(ctx context.Context, filter store.Filter) ([]*entitie
 }
 
 func (s *Store) queryWithFilter(ctx context.Context, f store.Filter) (*sql.Rows, error) {
+	// sqlPersons - quiery to get persons by filter.
+	// It expand in queryWithFilter.
+	sqlPersons := `
+		SELECT id, name, patronymic, surname, age, gender, nationality
+		FROM persons
+	`
 	// array will hold all the unique values we want to add into the query.
 	var filterValues []interface{}
 	query := ` WHERE`
