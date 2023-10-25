@@ -86,7 +86,7 @@ func (suite *storeTestSuite) TestUpdatePerson() {
 	newPatronymic2 := ""
 	newSurname2 := "Smith"
 	newAge2 := 23
-	newGender2 := "woman"
+	newGender2 := "female"
 	newNationality2 := "USA"
 	newParams2 := entities.Person{
 		Name: &newName2, Patronymic: &newPatronymic2, Surname: &newSurname2,

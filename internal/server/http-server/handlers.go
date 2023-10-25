@@ -1,9 +1,11 @@
 package httpserver
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kozyrev-m/effective-mobile-task/internal/entities"
@@ -71,13 +73,21 @@ func (s *HTTPServer) handlerUpdatePerson(c *gin.Context) {
 
 // handlerAddPerson creates person.
 func (s *HTTPServer) handlerAddPerson(c *gin.Context) {
-	person := entities.Person{}
-	if err := c.ShouldBindJSON(&person); err != nil {
+	input := entities.Person{}
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	id, err := s.service.CreatePerson(c.Request.Context(), person)
+	ctxTimeout, cancel := context.WithTimeout(c.Request.Context(), 3000*time.Millisecond)
+	defer cancel()
+	person, err := s.agent.ReceiveAndSet(ctxTimeout, input)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	id, err := s.service.CreatePerson(c.Request.Context(), *person)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return

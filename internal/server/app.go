@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/kozyrev-m/effective-mobile-task/internal/config"
+	"github.com/kozyrev-m/effective-mobile-task/internal/integration/agent"
 	"github.com/kozyrev-m/effective-mobile-task/internal/logger"
 	httpserver "github.com/kozyrev-m/effective-mobile-task/internal/server/http-server"
 	"github.com/kozyrev-m/effective-mobile-task/internal/store/pg"
@@ -24,7 +25,7 @@ func StartApp(cfg *config.Config) error {
 	}
 
 	srv := &http.Server{
-		Handler: httpserver.New(store),
+		Handler: httpserver.New(store, agent.New()),
 		Addr:    cfg.Address,
 	}
 

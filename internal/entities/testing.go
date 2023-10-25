@@ -5,8 +5,8 @@ var (
 	patronymic  string = "Ivanovich"
 	surname     string = "Ivanov"
 	age         int    = 30
-	gender      string = "man"
-	nationality string = "Russian"
+	gender      string = "male"
+	nationality string = "RU"
 )
 
 func TestPerson() Person {

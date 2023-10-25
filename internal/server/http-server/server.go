@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kozyrev-m/effective-mobile-task/internal/integration"
 	"github.com/kozyrev-m/effective-mobile-task/internal/service"
 	"github.com/kozyrev-m/effective-mobile-task/internal/store"
 )
@@ -13,10 +14,11 @@ import (
 type HTTPServer struct {
 	router  *gin.Engine
 	service *service.Service
+	agent   integration.Integration
 }
 
 // New is a constructor to create HTTPServer.
-func New(store store.Store) *HTTPServer {
+func New(store store.Store, agent integration.Integration) *HTTPServer {
 	gin.SetMode(gin.ReleaseMode)
 
 	svc := service.NewService(store)
@@ -24,6 +26,7 @@ func New(store store.Store) *HTTPServer {
 	s := &HTTPServer{
 		router:  gin.New(),
 		service: svc,
+		agent:   agent,
 	}
 
 	s.initRouter()
