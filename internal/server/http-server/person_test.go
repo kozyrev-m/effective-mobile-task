@@ -43,7 +43,7 @@ func (suite *handlerTestSuite) TestHandlerFindPerson() {
 				person.ID = uint64(id)
 
 				// init mock for current test case
-				suite.mock.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
+				suite.store.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
 
 				return strconv.Itoa(id)
 			},
@@ -56,7 +56,7 @@ func (suite *handlerTestSuite) TestHandlerFindPerson() {
 				id := rnd.Intn(32)
 
 				// init mock for current test case
-				suite.mock.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(nil, errTestFindPerson)
+				suite.store.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(nil, errTestFindPerson)
 
 				return strconv.Itoa(id)
 			},
@@ -100,7 +100,7 @@ func (suite *handlerTestSuite) TestHandlerDeletePerson() {
 				id := rnd.Intn(32)
 
 				// init mock for current test case
-				suite.mock.EXPECT().DeletePerson(gomock.Any(), uint64(id)).Return(uint64(id), nil)
+				suite.store.EXPECT().DeletePerson(gomock.Any(), uint64(id)).Return(uint64(id), nil)
 
 				return strconv.Itoa(id)
 			},
@@ -113,7 +113,7 @@ func (suite *handlerTestSuite) TestHandlerDeletePerson() {
 				id := rnd.Intn(32)
 
 				// init mock for current test case
-				suite.mock.EXPECT().DeletePerson(gomock.Any(), uint64(id)).Return(uint64(0), errTestDeletePerson)
+				suite.store.EXPECT().DeletePerson(gomock.Any(), uint64(id)).Return(uint64(0), errTestDeletePerson)
 
 				return strconv.Itoa(id)
 			},
@@ -174,8 +174,8 @@ func (suite *handlerTestSuite) TestHandlerUpdatePerson() {
 				updatedPerson.Nationality = &newNationality
 
 				// init mock for current test case
-				suite.mock.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
-				suite.mock.EXPECT().UpdatePerson(gomock.Any(), uint64(id), params).Return(&updatedPerson, nil)
+				suite.store.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
+				suite.store.EXPECT().UpdatePerson(gomock.Any(), uint64(id), params).Return(&updatedPerson, nil)
 
 				// make body
 				body, _ := json.Marshal(params)
@@ -201,8 +201,8 @@ func (suite *handlerTestSuite) TestHandlerUpdatePerson() {
 				params := entities.Person{Name: &newName, Age: &newAge, Nationality: &newNationality}
 
 				// init mock for current test case
-				suite.mock.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
-				suite.mock.EXPECT().UpdatePerson(gomock.Any(), uint64(id), params).Return(nil, errTestUpdatePerson)
+				suite.store.EXPECT().GetPersonByID(gomock.Any(), uint64(id)).Return(&person, nil)
+				suite.store.EXPECT().UpdatePerson(gomock.Any(), uint64(id), params).Return(nil, errTestUpdatePerson)
 
 				// make body
 				body, _ := json.Marshal(params)
@@ -257,8 +257,10 @@ func (suite *handlerTestSuite) TestHandlerAddPerson() {
 				// init person for test
 				person := entities.TestPerson()
 
-				// init mock for current test case
-				suite.mock.EXPECT().CreatePerson(gomock.Any(), person).Return(uint64(1), nil)
+				// init mock store for current test case
+				suite.store.EXPECT().CreatePerson(gomock.Any(), person).Return(uint64(1), nil)
+
+				suite.agent.EXPECT().ReceiveAndSet(gomock.Any(), person).Return(&person, nil)
 
 				// make body
 				body, _ := json.Marshal(person)
@@ -273,8 +275,11 @@ func (suite *handlerTestSuite) TestHandlerAddPerson() {
 				// init person for test
 				person := entities.Person{}
 
-				// init mock for current test case
-				suite.mock.EXPECT().CreatePerson(gomock.Any(), person).Return(uint64(0), errTestCreatePerson)
+				// init mock store for current test case
+				suite.store.EXPECT().CreatePerson(gomock.Any(), person).Return(uint64(0), errTestCreatePerson)
+
+				// init mock agent for current test case
+				suite.agent.EXPECT().ReceiveAndSet(gomock.Any(), person).Return(&person, nil)
 
 				// make body
 				body, _ := json.Marshal(person)

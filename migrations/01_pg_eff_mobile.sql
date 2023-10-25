@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS persons (
     created_at  TIMESTAMP NOT NULL DEFAULT now(),
     updated_at  TIMESTAMP NOT NULL DEFAULT now(),
     CONSTRAINT chck_gender_type CHECK (
-        gender IN ('man', 'woman')
+        gender IN ('male', 'female')
     )
 );
 -- +goose StatementEnd
