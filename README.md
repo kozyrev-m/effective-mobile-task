@@ -8,6 +8,7 @@
 - [Управление приложением](#management)
   - [Makefile](#management-makefile)
   - [Запуск приложения](#management-containers)
+- [Тестовая демонстрация](#demo)
 # Условие задачи <a name="task"/>
 Реализовать сервис, который будет получать ФИО по API, затем будет обогащать ответ из открытых API наиболее вероятными возрастом, полом и национальностью и сохранять данные в
 БД. По запросу выдавать информацию о найденных людях.  
@@ -73,11 +74,11 @@
 make docker-dev-up
 ```      
 После успешного завершения команды можно взаимодействовать с API приложения.  
+Конфигурация запущенных контейнеров: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)
 
+# Тестовая демонстрация <a name="demo">
+После [запуска приложения](#management-containers) можно проверить работу сервиса в ручном режиме.  
+  
 Файл для тестовой демонстрации работы сервиса: [demonstration.http](demonstration.http)  
 В файле представлены все возможные HTTP-запросы к приложению.  
 > *Файл [demonstration.http](demonstration.http) предназначен для расширения* [*REST Client*](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) *в редакторе Visual Studio Code*  
-    
-
-Конфигурация запущенных контейнеров: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)
-   
