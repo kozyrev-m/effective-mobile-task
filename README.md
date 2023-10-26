@@ -1,5 +1,8 @@
 # effective-mobile-task
 - [Условие задачи](#task)
+- [Архитектура](#arch)
+  - [Структура приложения](#arch-struct)
+  - [Схема БД](#arch-db)
 - [Конфигурация приложения](#config)
 - [Управление приложением](#management)
   - [Makefile](#management-makefile)
@@ -29,6 +32,16 @@
 путем миграций)
 4. Покрыть код debug- и info-логами
 5. Вынести конфигурационные данные в .env
+
+# Архитектура <a name="arch"/>
+
+## Структура приложения <a name="arch-struct"/>
+![Структура приложения](docs/arch-structure.png)
+
+## Схема БД <a name="arch-db"/>
+![Схема БД](docs/arch-db.png)
+
+Подробнее см [migrations/01_pg_eff_mobile.sql](migrations/01_pg_eff_mobile.sql)
 
 # Конфигурация приложения <a name="config"/>
 
