@@ -1,0 +1,53 @@
+########
+# 1. find person
+#
+GET http://localhost:8084/find/3
+Content-Type: application/json
+
+########
+# 2. delete person
+#
+DELETE http://localhost:8084/delete/1
+Content-Type: application/json
+
+########
+# 3. edit person
+#
+PATCH http://localhost:8084/update/1
+Content-Type: application/json
+
+{
+    "name": "Anna",
+    "surname": "Ivanova",
+    "patronymic": "Vasilevna",
+    "age": 24,
+    "gender": "female"
+}
+
+########
+# 4. add person (fio)
+#
+POST http://localhost:8084/add
+Content-Type: application/json
+
+{
+    "name": "Dmitriy",
+    "surname": "Ushakov",
+    "patronymic": "Vasilevich",
+    "age": 30,
+    "gender": "male",
+    "nationality": "russian"
+}
+
+########
+# 5. get persons by filter and set pagination
+#
+POST http://localhost:8084/persons
+Content-Type: application/json
+
+{
+    "page": 4,
+    "per_page": 10,
+    "name": "Dmi",
+    "patronymic": "Vas"
+}

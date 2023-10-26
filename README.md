@@ -66,6 +66,9 @@
 make docker-dev-up
 ```      
 После успешного завершения команды можно взаимодействовать с API приложения.  
+
+Файл для тестовой демонстрации работы сервиса: [demonstration.http](demonstration.http)  
+В файле представлены все возможные HTTP-запросы к приложению.  
   
 Конфигурация запущенных контейнеров см: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)
    
