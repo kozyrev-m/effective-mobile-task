@@ -3,6 +3,7 @@
 - [Архитектура](#arch)
   - [Структура приложения](#arch-struct)
   - [Схема БД](#arch-db)
+- [Использованные библиотеки](#libs)
 - [Конфигурация приложения](#config)
 - [Управление приложением](#management)
   - [Makefile](#management-makefile)
@@ -41,7 +42,13 @@
 ## Схема БД <a name="arch-db"/>
 ![Схема БД](docs/arch-db.png)
 
-Подробнее см [migrations/01_pg_eff_mobile.sql](migrations/01_pg_eff_mobile.sql)
+Подробнее: [migrations/01_pg_eff_mobile.sql](migrations/01_pg_eff_mobile.sql)
+
+# Использованные библиотеки <a name="libs"/>
+- Логгирование: [go.uber.org/zap](https://github.com/uber-go/zap)
+- Работа с БД: [jackc/pgx](https://github.com/jackc/pgx), [pressly/goose](https://github.com/pressly/goose)
+- Работа с HTTP: [gin-gonic/gin](https://github.com/gin-gonic/gin), [go-resty/resty](https://github.com/go-resty/resty)
+- Тестирование: [stretchr/testify](https://github.com/stretchr/testify), [go.uber.org/mock/gomock](https://github.com/uber-go/mock)
 
 # Конфигурация приложения <a name="config"/>
 
@@ -58,7 +65,7 @@
 Подготовка приложения, тестирование, и запуск выполняется с помощью команды make (из корня репозитория).  
 В Makefile определены основные команды для управления приложением. 
   
-Подробнее [Makefile](Makefile)  
+Подробнее: [Makefile](Makefile)  
   
 ## Запуск приложения <a name="management-containers">    
 Команда для создания и запуска контейнеров с приложением и базой данных:  
@@ -69,6 +76,8 @@ make docker-dev-up
 
 Файл для тестовой демонстрации работы сервиса: [demonstration.http](demonstration.http)  
 В файле представлены все возможные HTTP-запросы к приложению.  
-  
-Конфигурация запущенных контейнеров см: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)
+> *Файл [demonstration.http](demonstration.http) предназначен для расширения* [*REST Client*](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) *в редакторе Visual Studio Code*  
+    
+
+Конфигурация запущенных контейнеров: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)
    
