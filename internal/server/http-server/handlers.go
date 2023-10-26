@@ -107,7 +107,7 @@ func (s *HTTPServer) handlerPersons(c *gin.Context) {
 	}
 
 	filter := input.Convert()
-	persons, err := s.service.GetPersons(c.Request.Context(), filter)
+	persons, hasNextPagge, err := s.service.GetPersons(c.Request.Context(), filter)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
@@ -116,10 +116,7 @@ func (s *HTTPServer) handlerPersons(c *gin.Context) {
 	c.Writer.Header().Set("Pagination-Page", strconv.Itoa(*filter.Page))
 	c.Writer.Header().Set("Pagination-Limit", strconv.Itoa(*filter.PerPage))
 
-	c.Writer.Header().Set(
-		"Has-Page",
-		strconv.FormatBool((len(persons)-*filter.PerPage) >= 0),
-	)
+	c.Writer.Header().Set("Has-Next-Page", strconv.FormatBool(hasNextPagge))
 
 	c.JSON(
 		http.StatusOK,
