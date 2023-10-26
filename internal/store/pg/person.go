@@ -168,6 +168,7 @@ func (s *Store) GetPersons(ctx context.Context, filter store.Filter) ([]*entitie
 	if arr == nil {
 		return []*entities.Person{}, nil
 	}
+
 	return arr, err
 }
 
@@ -237,6 +238,10 @@ func (s *Store) queryWithFilter(ctx context.Context, f store.Filter) (*sql.Rows,
 		query += ` nationality = $` + strconv.Itoa(len(filterValues))
 	}
 
+	if query == ` WHERE` {
+		query += ` 1=1`
+	}
+
 	query += ` ORDER BY id `
 
 	if f.Page == nil {
@@ -248,7 +253,8 @@ func (s *Store) queryWithFilter(ctx context.Context, f store.Filter) (*sql.Rows,
 		f.PerPage = &defaultPerPage
 	}
 
-	filterValues = append(filterValues, *f.PerPage)
+	limit := *f.PerPage + 1
+	filterValues = append(filterValues, limit)
 	query += ` LIMIT $` + strconv.Itoa(len(filterValues))
 
 	offset := (*f.Page - 1) * *f.PerPage

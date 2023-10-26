@@ -48,6 +48,18 @@ func (svc *Service) UpdatePerson(ctx context.Context, personID uint64, params en
 }
 
 // GetPersons gets persons by filter.
-func (svc *Service) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, error) {
-	return svc.store.GetPersons(ctx, filter)
+func (svc *Service) GetPersons(ctx context.Context, filter store.Filter) ([]*entities.Person, bool, error) {
+	var hasNextPage bool = false
+
+	persons, err := svc.store.GetPersons(ctx, filter)
+	if err != nil {
+		return nil, false, err
+	}
+
+	if len(persons) > *filter.PerPage {
+		persons = persons[:len(persons)-1]
+		hasNextPage = true
+	}
+
+	return persons, hasNextPage, nil
 }
