@@ -2,13 +2,11 @@
 # 1. find person
 #
 GET http://localhost:8084/find/3
-Content-Type: application/json
 
 ########
 # 2. delete person
 #
 DELETE http://localhost:8084/delete/1
-Content-Type: application/json
 
 ########
 # 3. edit person
