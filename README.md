@@ -181,19 +181,19 @@ Content-Type: application/json
   ```
 - Создание и запуск контейнеров, необходимых для работы приложения (программа и база данных)  
   ```
-  make docker-dev-up
+  make docker-app-up
   ```
 - Остановка и удаление контейнеров, созданных командой выше (docker-dev-up)
   ```
-  make docker-dev-down
+  make docker-app-down
   ```
-- Создание и запуск контейнера (тестовая база данных) для тестирования приложения  
+- Создание и запуск контейнера c БД для разработки и отладки приложения  
   ```
-  make docker-test-up
+  make docker-dev-db-up
   ```
-- Остановка и удаление контейнера, созданного предыдущей командой (docker-test-up)
+- Остановка и удаление контейнера, созданного предыдущей командой (docker-dev-db-up)
   ```
-  make docker-test-down
+  make docker-dev-db-down
   ```
 
   
@@ -201,16 +201,16 @@ Content-Type: application/json
   
 # Тестовая демонстрация <a name="demo"/>
 ## Запуск приложения <a name="demo-containers"/>    
-Команда для создания и запуска контейнеров с приложением и базой данных:  
+Команда для создания и запуска контейнеров с приложением и базой данных (запускать из корня репозитория):  
 ```
-make docker-dev-up
+make docker-app-up
 ```    
 API приложения будет доступно на localhost:8084  
     
-Конфигурация запущенных контейнеров: [docker-compose/dev/docker-compose.yml](docker-compose/dev/docker-compose.yml)  
+Конфигурация запущенных контейнеров: [docker-compose/app/docker-compose.yml](docker-compose/app/docker-compose.yml)  
   
 ## Взаимодействие с приложением <a name="demo-req"/>
-После успешного [запуска приложения](#demo-containers) можно проверить работу сервиса в ручном режиме.  
+После успешного запуска приложения можно проверить работу сервиса в ручном режиме.  
   
 Файл для тестовой демонстрации работы сервиса: [demonstration.http](demonstration.http)  
 В файле представлены все возможные HTTP-запросы к приложению.  

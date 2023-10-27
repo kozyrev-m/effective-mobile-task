@@ -1,0 +1,39 @@
+services:
+  app:
+    container_name: app_effmobile
+    build: ../..
+    ports:
+      - "8084:8080"
+    environment:
+      RUN_ADDR: 0.0.0.0:8080
+      LOG_LEVEL: DEBUG
+      DATABASE_DSN: postgres://effmobile:effmobile@postgres:5432/effmobile_app
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
+
+  postgres:
+    container_name: db_effmobile
+    image: postgres:14.3-alpine
+    ports:
+      - "15437:5432"
+    environment:
+      POSTGRES_DB: effmobile_app
+      PGDATABASE: effmobile_app
+      POSTGRES_USER: effmobile
+      PGUSER: effmobile
+      POSTGRES_PASSWORD: effmobile
+    volumes:
+      - db-effective-mobile-task:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  db-effective-mobile-task:

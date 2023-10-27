@@ -8,7 +8,7 @@ import (
 )
 
 // test db address.
-var testDatabaseDSN = "postgres://effmobile:effmobile@localhost:15438/effmobile_test"
+var testDatabaseDSN = "postgres://effmobile:effmobile@localhost:15439/effmobile_test"
 
 type storeTestSuite struct {
 	suite.Suite
