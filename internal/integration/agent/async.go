@@ -58,8 +58,6 @@ func (cl *Client) asyncRequestAge(ctx context.Context, name string) chan ResultA
 		age, err := cl.getAge(ctx, name)
 
 		resCh <- ResultAge{Age: age, Err: err}
-
-		return
 	}()
 
 	return resCh
